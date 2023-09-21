@@ -27,10 +27,11 @@ import java.util.Map;
  * @author ghassen
  */
 public class GamesList extends Form {
-
-    public GamesList(Resources theme) {
+ public GamesList(Resources theme) {
         super(new BorderLayout());
-        
+        Toolbar tb =new Toolbar();
+      setToolbar(tb);
+      tb.addCommandToLeftBar("List view",null, (e) -> new GameMultilist(theme).showBack());
         ArrayList<Map<String, Object>> data = new ArrayList<>();
         // 2eme créer notre list des jeux
         ArrayList<Game> games = new ArrayList<>();
@@ -70,7 +71,9 @@ public class GamesList extends Form {
             // ajouter notre image et lautre container sur laxe de x
             c1.add(img);
             c1.add(c2);
-            
+            name.addPointerPressedListener((ActionListener) (ActionEvent evt) -> {
+                new GameDetails(theme, game).show();
+            });
             // ajouter le container c1 pour notre form f 
             f.add(c1);
 
