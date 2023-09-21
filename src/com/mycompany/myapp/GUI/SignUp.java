@@ -35,6 +35,12 @@ public class SignUp extends Form {
         
         //Button Login
         loginButton = new Button("S'authentifier");
+         loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                new GamesList(theme).show();
+            }
+        });
          //Button Inscrit
         InscritButton = new Button("Créer un compte");
         InscritButton.addActionListener(new ActionListener() {
