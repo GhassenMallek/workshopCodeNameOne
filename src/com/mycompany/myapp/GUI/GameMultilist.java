@@ -32,13 +32,13 @@ public class GameMultilist extends Form {
         ArrayList<Map<String, Object>> data = new ArrayList<>();
 
         // Create your Game objects with resource paths
-        Game game1 = new Game("Devil May Cry 5", 200, "/dmc5.jpg", "Description 1");
-        Game game2 = new Game("Resident Evill VIII", 200, "/re8.jpg", "Description 2");
-        Game game3 = new Game("Need For Speed Heat", 100, "/nfs.jpg", "Description 3");
-        Game game4 = new Game("Red Dead Redemption II", 150, "/rdr2.jpg", "Description 4");
-        Game game5 = new Game("FIFA 22", 100, "/fifa.jpg", "Description 5");
-        Game game6 = new Game("Minecraft", 200, "/minecraft.jpg", "Description 6");
-
+     Game game1 = new Game("Devil May Cry 5", 200, "/dmc5.jpg", "Even with the best gameplay footage and screenshots to entice players to dive deeper on your game page, you can’t just stick a basic marketplace description and count on the visuals to pull more than their fair share of the weight to convince players to choose your game.");
+        Game game2 = new Game("Resident Evill VIII", 200, "/re8.jpg", "Even with the best gameplay footage and screenshots to entice players to dive deeper on your game page, you can’t just stick a basic marketplace description and count on the visuals to pull more than their fair share of the weight to convince players to choose your game.");
+        Game game3 = new Game("Need For Speed Heat", 100, "/nfs.jpg", "Even with the best gameplay footage and screenshots to entice players to dive deeper on your game page, you can’t just stick a basic marketplace description and count on the visuals to pull more than their fair share of the weight to convince players to choose your game.");
+        Game game4 = new Game("Red Dead Redemption II", 150, "/rdr2.jpg", "Even with the best gameplay footage and screenshots to entice players to dive deeper on your game page, you can’t just stick a basic marketplace description and count on the visuals to pull more than their fair share of the weight to convince players to choose your game.");
+        Game game5 = new Game("FIFA 22", 100, "/fifa.jpg", "Even with the best gameplay footage and screenshots to entice players to dive deeper on your game page, you can’t just stick a basic marketplace description and count on the visuals to pull more than their fair share of the weight to convince players to choose your game.");
+        Game game6 = new Game("Minecraft", 200, "/minecraft.jpg", "Even with the best gameplay footage and screenshots to entice players to dive deeper on your game page, you can’t just stick a basic marketplace description and count on the visuals to pull more than their fair share of the weight to convince players to choose your game.");
+        
         // Add your Game objects to the data list
         data.add(createListEntry(game1));
         data.add(createListEntry(game2));
