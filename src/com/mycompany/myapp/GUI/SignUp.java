@@ -60,12 +60,7 @@ public class SignUp extends Form {
         //create a SpanButton
         
         SpanButton spanButton = new SpanButton("Oublier mot de passe");
-        spanButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                new ForgetPassword(theme).show();
-            }
-        });
+    
               // Add components to form
         Container centerContainer = new Container(new BoxLayout(BoxLayout.Y_AXIS));
         centerContainer.add(form);
