@@ -13,7 +13,6 @@ import com.codename1.ui.Toolbar;
 import java.io.IOException;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.io.NetworkEvent;
-import com.mycompany.myapp.GUI.ForgetPassword;
 import com.mycompany.myapp.GUI.SignIn;
 import com.mycompany.myapp.GUI.SignUp;
 
