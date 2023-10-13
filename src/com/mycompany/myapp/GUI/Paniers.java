@@ -1,16 +1,24 @@
 package com.mycompany.myapp.GUI;
 
+import com.codename1.components.ImageViewer;
 import com.codename1.db.Cursor;
 import com.codename1.db.Database;
 import com.codename1.db.Row;
 import static com.codename1.io.Util.cleanup;
+import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
+import com.codename1.ui.Label;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.URLImage;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.events.SelectionListener;
+import com.codename1.ui.layouts.BorderLayout;
+import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.list.DefaultListModel;
 import com.codename1.ui.list.MultiList;
 import com.codename1.ui.util.Resources;
@@ -18,22 +26,26 @@ import com.mycompany.myapp.GUI.GameMultilist;
 import com.mycompany.myapp.entity.Game;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Paniers extends Form {
 
+    ArrayList<Game> gamesList = new ArrayList<>();
     EncodedImage enc;
     Image img = null;
-
+    Form f;
+    int counter = 0;
+    private Resources theme;
     private static ArrayList<Game> basket = new ArrayList<>();
 
     public Paniers(Resources theme) {
+        super(new BorderLayout());
         Toolbar tb = new Toolbar();
         setToolbar(tb);
         tb.addCommandToLeftBar("Back", null, e -> new GameMultilist(theme).showBack());
 
-        ArrayList<Map<String, Object>> gamesList = new ArrayList<>();
         try {
             Database db = Database.openOrCreate("G-Store.db");
             Cursor cur = db.executeQuery("SELECT * FROM games");
@@ -44,56 +56,86 @@ public class Paniers extends Form {
                 String price = cur.getRow().getString(1);
                 String urlImg = cur.getRow().getString(2);
                 Game game = new Game(name, price, urlImg);
-                gamesList.add(createListEntry(name, price, urlImg));
+                Collections.addAll(gamesList, game);
+
             }
-            DefaultListModel<Map<String, Object>> model = new DefaultListModel<>(gamesList);
-            MultiList ml = new MultiList(model);
-            ml.addSelectionListener(new SelectionListener() {
-                @Override
-                public void selectionChanged(int oldSelected, int newSelected) {
-                    // Get the selected game's details from the data
-                    if (gamesList.size() > 0) {
-                        Map<String, Object> selectedEntry = gamesList.get(newSelected);
-                        
-                        System.out.println("delete from games where name = '" + selectedEntry.get("Line1") + "'");
-                        try {
-                            Database.openOrCreate("G-Store.db").execute("delete from games where name = '" + selectedEntry.get("Line1") + "'");
-
-                        } catch (IOException ex) {
-                            System.out.println("error 61 " + ex);
-                        }
-
-                    }
-                }
-            });
-            add(ml);
 
         } catch (IOException ex) {
             System.out.println(ex);
         }
+        f = new Form("G-Store Esprit", BoxLayout.y());
+        for (Game game : gamesList) {
+            addItem(game, theme, counter);
+            counter++;
+        }
+        add(BorderLayout.CENTER, f);
+    }
+public void deleteItem(String itemName) {
+    try {
+        Database.openOrCreate("G-Store.db").execute("delete from games where name = '" + itemName + "'");
+        Dialog.show("Success", "Item deleted", "OK", null);
 
-        // basket.addAll(gamesList);
+        
+        for (int i = 0; i < gamesList.size(); i++) {
+            Game game = gamesList.get(i);
+            if (game.getName().equals(itemName)) {
+                gamesList.remove(i);
+                break; 
+            }
+        }
+
+        refreshForm();
+
+    } catch (IOException ex) {
+        System.out.println("Error: " + ex);
+    }
+}
+
+public void refreshForm() {
+    f.removeAll(); 
+
+    for (Game game : gamesList) {
+        addItem(game, theme, counter);
+        counter++;
     }
 
-    private Map<String, Object> createListEntry(String name, String price, String urlImg) {
-        Map<String, Object> entry = new HashMap<>();
-        entry.put("Line1", name);
-        entry.put("Line2", price + " TND");
-        // You can set the "icon" entry with the image associated with the game
-        entry.put("icon", GetImage(urlImg)); // Assuming theme contains the images
-        Game game = new Game(name, price, GetImage(urlImg).toString());
-        entry.put("game", game); // Store the Game object for later retrieval
-        return entry;
-    }
+    f.revalidate(); // Refresh the form
+    f.repaint();
+}
 
-    private Image GetImage(String url) {
-        Image img = null;
+    public void addItem(Game game, Resources theme, int index) {
+        ImageViewer img = null;
+        Container c1 = new Container(new BoxLayout(BoxLayout.X_AXIS));
         try {
-            img = Image.createImage(url);
-        } catch (IOException ex) {
-            System.out.println(ex);
-        }
+            img = new ImageViewer(Image.createImage(game.getImg()));
 
-        return img;
+        } catch (IOException ex) {
+            System.out.println("err" + ex.getMessage());
+        }
+        Container c2 = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+
+        Label name = new Label(game.getName());
+
+        Label price = new Label(game.getPrice() + " TND");
+
+        //ajouter les label pour note contaier sur laxe de y
+        c2.add(name);
+        c2.add(price);
+        // ajouter notre image et lautre container sur laxe de x
+        c1.add(img);
+        c1.add(c2);
+        name.addPointerPressedListener((ActionListener) (ActionEvent evt) -> {
+            String itemNameToDelete = name.getText();
+    deleteItem(itemNameToDelete);
+              
+
+        });
+        // ajouter le container c1 pour notre form f 
+        f.add(c1);
+
+        f.refreshTheme(true);
+
     }
+    
+
 }
