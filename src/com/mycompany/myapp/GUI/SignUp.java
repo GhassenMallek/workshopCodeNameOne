@@ -8,6 +8,7 @@ import com.codename1.components.ImageViewer;
 import com.codename1.components.SpanButton;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
 import com.codename1.ui.TextField;
@@ -16,6 +17,7 @@ import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.myapp.services.Service;
 
 /**
  *
@@ -38,11 +40,23 @@ public class SignUp extends Form {
          loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                new GamesList(theme).show();
+                if(Service.getInstance().Auth(emailField.getText(), passwordField.getText()))
+                { new GameMultilist(theme).show();}
+                else{
+                    Dialog.show("error", "verifier login password", "ok",null);
+                }
+                
+               
             }
         });
          //Button Inscrit
         InscritButton = new Button("Créer un compte");
+        InscritButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                new GamesList(theme).show();
+            }
+        });
         InscritButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
